@@ -46,7 +46,8 @@ export interface CSVMetadata {
   time?: string;
   sampleRate?: number;      // Hz
   duration?: number;        // seconds
-  segmentTimes?: number[];  // lap times from header
+  segmentTimes?: number[];  // cumulative times (beacon markers) in seconds
+  lapTimes?: number[];      // individual lap times in seconds
 }
 
 // Parsed CSV result

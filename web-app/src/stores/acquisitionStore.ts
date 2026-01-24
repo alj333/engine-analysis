@@ -73,6 +73,30 @@ export const useAcquisitionStore = create<AcquisitionState>((set, get) => ({
       .sort((a, b) => a.lapTime - b.lapTime);
     const bestLapIndices = sortedLaps.slice(0, 5).map((lap) => lap.index);
 
+    // Auto-detect RPM range from data
+    let detectedMinRpm = 8000;
+    let detectedMaxRpm = 16000;
+
+    if (data.rpm && data.rpm.length > 0) {
+      const validRpms = data.rpm.filter(r => r > 0 && r < 25000);
+      if (validRpms.length > 0) {
+        const actualMin = Math.min(...validRpms);
+        const actualMax = Math.max(...validRpms);
+
+        // Set min to slightly below the 5th percentile, max to slightly above 95th percentile
+        const sortedRpms = [...validRpms].sort((a, b) => a - b);
+        const p5Index = Math.floor(sortedRpms.length * 0.05);
+        const p95Index = Math.floor(sortedRpms.length * 0.95);
+
+        // Round to nearest 500 RPM for cleaner values
+        detectedMinRpm = Math.max(1000, Math.floor(sortedRpms[p5Index] / 500) * 500 - 500);
+        detectedMaxRpm = Math.ceil(sortedRpms[p95Index] / 500) * 500 + 500;
+
+        console.log('Auto-detected RPM range:', detectedMinRpm, '-', detectedMaxRpm,
+          '(actual:', actualMin.toFixed(0), '-', actualMax.toFixed(0), ')');
+      }
+    }
+
     set({
       fileName,
       metadata,
@@ -81,6 +105,8 @@ export const useAcquisitionStore = create<AcquisitionState>((set, get) => ({
       laps,
       channelMapping,
       selectedLaps: bestLapIndices,
+      minRpm: detectedMinRpm,
+      maxRpm: detectedMaxRpm,
       error: null,
     });
   },

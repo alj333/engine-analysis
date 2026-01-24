@@ -5,15 +5,15 @@ import type { TelemetryData, LapInfo, ChannelMapping, CSVMetadata, ParsedCSV } f
 const CHANNEL_MAPPINGS: Record<string, string[]> = {
   time: [
     'Time', 'time', 'Time(sec)', 'Time_s', 'RunningLapTime', 'Lap Time',
-    'lap time [s]', 'Time [s]', 'sec'
+    'lap time [s]', 'Time [s]'
   ],
   distance: [
     'Distance', 'distance', 'Space', 'space', 'Lap Distance[m]', 'GPS_Distance',
-    'GPS Distance', 'km'
+    'GPS Distance'
   ],
   speed: [
     'GPS_Speed', 'Speed', 'SpeedGPS', 'GPS Speed', 'SPEEDG_Kph', 'V_Front',
-    'speed', 'XKart Speed[kph]', 'GPS_Speed[km/h]', 'GPS Speed[km/h]', 'km/h'
+    'speed', 'XKart Speed[kph]', 'GPS_Speed[km/h]', 'GPS Speed[km/h]'
   ],
   rpm: [
     'RPM', 'Engine', 'Rpm', 'rpm', 'engine speed', 'XKart RPM[rpm]', 'RPM_F',
@@ -47,26 +47,76 @@ const CHANNEL_MAPPINGS: Record<string, string[]> = {
   ],
   throttle: [
     'Throttle', 'throttle', 'TPS', 'Throttle Position', 'PosAcceleratore',
-    'Accelerator', '%'
+    'Accelerator'
   ],
   lap: [
     'Lap', 'lap', 'Lap Number', 'LAP', 'Lap #'
   ],
 };
 
+// Metadata keys to skip when looking for headers (these are key-value metadata rows)
+// Note: 'time' is NOT included because it conflicts with the "Time" data column header
+const METADATA_KEYS = [
+  'format', 'venue', 'vehicle', 'user', 'driver', 'data source', 'comment',
+  'date', 'sample rate', 'duration', 'segment', 'beacon markers',
+  'segment times', 'session'
+];
+
 // Detect channel from header name
 function detectChannel(header: string): string | null {
+  if (!header) return null;
   const normalizedHeader = header.toLowerCase().trim();
+
+  // Skip if it looks like a lap time (contains colon with numbers, like "0:58.421")
+  if (/^\d+:\d+/.test(normalizedHeader)) return null;
 
   for (const [channel, aliases] of Object.entries(CHANNEL_MAPPINGS)) {
     for (const alias of aliases) {
-      if (normalizedHeader === alias.toLowerCase() ||
-          normalizedHeader.includes(alias.toLowerCase())) {
+      const normalizedAlias = alias.toLowerCase();
+      if (normalizedHeader === normalizedAlias ||
+          normalizedHeader.includes(normalizedAlias)) {
         return channel;
       }
     }
   }
   return null;
+}
+
+// Check if a row looks like a header row (has multiple channel matches)
+function isHeaderRow(row: string[]): boolean {
+  if (!row || row.length < 3) return false;
+
+  const firstCell = row[0]?.replace(/"/g, '').toLowerCase().trim();
+
+  // Skip if first cell is a known metadata key (but not 'time' which is also a data column)
+  // Also check if it looks like a metadata row (key-value pair format)
+  if (METADATA_KEYS.some(key => firstCell === key || firstCell.startsWith(key + ' '))) {
+    return false;
+  }
+
+  // Count how many cells match known channels
+  let channelMatches = 0;
+  const nonEmptyCells = row.filter(cell => cell?.replace(/"/g, '').trim()).length;
+
+  for (const cell of row) {
+    const cleanCell = cell?.replace(/"/g, '').trim();
+    if (cleanCell && detectChannel(cleanCell)) {
+      channelMatches++;
+    }
+  }
+
+  // Header row should have at least 3 channel matches (Time, Speed/RPM, etc.)
+  // AND have more than 2 non-empty cells (to distinguish from metadata key-value rows)
+  if (channelMatches >= 3 && nonEmptyCells >= 3) {
+    return true;
+  }
+
+  // Also accept if first cell is exactly "time" or "distance" AND we have multiple columns
+  if ((firstCell === 'time' || firstCell === 'distance') && nonEmptyCells >= 3) {
+    return true;
+  }
+
+  return false;
 }
 
 // Build channel mapping from headers
@@ -80,6 +130,7 @@ function buildChannelMapping(headers: string[]): ChannelMapping {
 
   // Try to match headers to channels
   for (const header of headers) {
+    if (!header) continue;
     const channel = detectChannel(header);
     if (channel && mapping[channel].status === 'unmatched') {
       mapping[channel] = { header, status: 'matched' };
@@ -92,11 +143,13 @@ function buildChannelMapping(headers: string[]): ChannelMapping {
 // Parse AIM CSV metadata from header rows
 function parseAIMMetadata(rows: string[][]): CSVMetadata {
   const metadata: CSVMetadata = {};
+  let beaconMarkers: number[] = [];
+  let segmentTimes: number[] = [];
 
   for (const row of rows) {
     if (row.length < 2) continue;
-    const key = row[0]?.replace(/"/g, '').toLowerCase();
-    const value = row[1]?.replace(/"/g, '');
+    const key = row[0]?.replace(/"/g, '').toLowerCase().trim();
+    const value = row[1]?.replace(/"/g, '').trim();
 
     switch (key) {
       case 'format':
@@ -124,16 +177,66 @@ function parseAIMMetadata(rows: string[][]): CSVMetadata {
       case 'duration':
         metadata.duration = parseFloat(value) || 0;
         break;
-      case 'segment times':
       case 'beacon markers':
-        // Parse lap times from comma-separated values
-        const times = row.slice(1)
-          .map(t => parseFloat(t?.replace(/"/g, '') || '0'))
-          .filter(t => t > 0);
-        if (times.length > 0) {
-          metadata.segmentTimes = times;
+        // Beacon markers are cumulative times in seconds (preferred)
+        for (let i = 1; i < row.length; i++) {
+          const cellValue = row[i]?.replace(/"/g, '').trim();
+          if (!cellValue) continue;
+
+          // Handle comma-separated values in a single cell
+          const parts = cellValue.split(',');
+          for (const part of parts) {
+            const t = parseFloat(part.trim());
+            if (!isNaN(t) && t > 0) {
+              beaconMarkers.push(t);
+            }
+          }
         }
         break;
+      case 'segment times':
+        // Segment times may be in MM:SS.mmm format (individual lap times)
+        for (let i = 1; i < row.length; i++) {
+          const cellValue = row[i]?.replace(/"/g, '').trim();
+          if (!cellValue) continue;
+
+          // Handle MM:SS.mmm format
+          if (cellValue.includes(':')) {
+            const [mins, secs] = cellValue.split(':');
+            const totalSecs = parseInt(mins) * 60 + parseFloat(secs);
+            if (!isNaN(totalSecs) && totalSecs > 0) {
+              segmentTimes.push(totalSecs);
+            }
+          } else {
+            const t = parseFloat(cellValue);
+            if (!isNaN(t) && t > 0) {
+              segmentTimes.push(t);
+            }
+          }
+        }
+        break;
+    }
+  }
+
+  // Prefer beacon markers (cumulative times) over segment times
+  if (beaconMarkers.length > 0) {
+    // Beacon markers are already cumulative - use them directly
+    metadata.segmentTimes = beaconMarkers;
+    metadata.lapTimes = segmentTimes.length > 0 ? segmentTimes : undefined;
+  } else if (segmentTimes.length > 0) {
+    // Check if segment times are cumulative (increasing) or individual
+    const isIncreasing = segmentTimes.every((t, i) => i === 0 || t > segmentTimes[i - 1]);
+
+    if (isIncreasing) {
+      // Already cumulative
+      metadata.segmentTimes = segmentTimes;
+    } else {
+      // Individual lap times - convert to cumulative
+      let cumulative = 0;
+      metadata.segmentTimes = segmentTimes.map(t => {
+        cumulative += t;
+        return cumulative;
+      });
+      metadata.lapTimes = segmentTimes;
     }
   }
 
@@ -163,17 +266,20 @@ function extractLaps(
         startIndex,
         endIndex,
         isOutLap: i === 0,
-        isInLap: i === data.lapMarkers.length - 1 && lapTime > 90, // Assume in-lap if > 90s
+        isInLap: i === data.lapMarkers.length - 1 && lapTime > 90,
       });
     }
   } else if (metadata.segmentTimes && metadata.segmentTimes.length > 0) {
-    // Use segment times from metadata
+    // Use segment times from metadata (cumulative times from beacon markers)
     let currentIndex = 0;
 
     for (let i = 0; i < metadata.segmentTimes.length; i++) {
-      const lapTime = i === 0
-        ? metadata.segmentTimes[i]
-        : metadata.segmentTimes[i] - metadata.segmentTimes[i - 1];
+      // Use individual lap times if available, otherwise calculate from cumulative
+      const lapTime = metadata.lapTimes && metadata.lapTimes[i]
+        ? metadata.lapTimes[i]
+        : (i === 0
+            ? metadata.segmentTimes[i]
+            : metadata.segmentTimes[i] - metadata.segmentTimes[i - 1]);
 
       const startIndex = currentIndex;
       const endTime = metadata.segmentTimes[i];
@@ -187,7 +293,7 @@ function extractLaps(
         index: i,
         lapTime,
         startIndex,
-        endIndex: currentIndex - 1,
+        endIndex: Math.max(0, currentIndex - 1),
         isOutLap: i === 0,
         isInLap: false,
       });
@@ -234,25 +340,72 @@ export async function parseCSV(file: File): Promise<ParsedCSV> {
           let dataStartRow = 0;
           let headers: string[] = [];
 
-          // Look for the header row (contains column names)
-          for (let i = 0; i < Math.min(20, allRows.length); i++) {
+          // Look for the header row (contains column names like Time, RPM, Speed)
+          for (let i = 0; i < Math.min(30, allRows.length); i++) {
             const row = allRows[i];
+
+            // Skip empty or short rows
             if (!row || row.length < 3) continue;
 
-            // Check if this row looks like headers (contains known channel names)
-            const firstCell = row[0]?.replace(/"/g, '').toLowerCase();
-            if (firstCell === 'time' || firstCell === 'distance' ||
-                row.some(cell => detectChannel(cell?.replace(/"/g, '') || '') !== null)) {
-              headers = row.map(h => h?.replace(/"/g, '') || '');
+            // Check if this row looks like a header row
+            if (isHeaderRow(row)) {
+              // Clean up headers - remove quotes and empty strings
+              headers = row
+                .map(h => h?.replace(/"/g, '').trim() || '')
+                .filter((h, idx) => h || idx < row.length - 1); // Keep non-empty, allow trailing
+
+              // Remove trailing empty headers
+              while (headers.length > 0 && !headers[headers.length - 1]) {
+                headers.pop();
+              }
+
               dataStartRow = i + 1;
 
-              // Skip unit rows (rows that contain units like "sec", "km/h", etc.)
+              // Skip additional header rows and unit rows
               while (dataStartRow < allRows.length) {
                 const nextRow = allRows[dataStartRow];
-                const firstVal = nextRow?.[0]?.replace(/"/g, '').toLowerCase();
-                if (firstVal && !isNaN(parseFloat(firstVal))) {
-                  break; // Found numeric data
+                if (!nextRow || nextRow.length < 3) {
+                  dataStartRow++;
+                  continue;
                 }
+
+                const firstVal = nextRow[0]?.replace(/"/g, '').trim();
+
+                // Check if this is another header row (duplicate)
+                if (isHeaderRow(nextRow)) {
+                  dataStartRow++;
+                  continue;
+                }
+
+                // Check if this is a units row (contains "sec", "km/h", "rpm", etc.)
+                const looksLikeUnits = nextRow.some(cell => {
+                  const c = cell?.replace(/"/g, '').toLowerCase().trim();
+                  return ['sec', 'km', 'km/h', 'rpm', 'g', 'm/s', 'm', '%', '°c'].includes(c);
+                });
+
+                if (looksLikeUnits) {
+                  dataStartRow++;
+                  continue;
+                }
+
+                // Check if this is a channel number row (contains just numbers like 1, 2, 3, 4)
+                const allSmallNumbers = nextRow.every(cell => {
+                  const c = cell?.replace(/"/g, '').trim();
+                  if (!c) return true;
+                  const num = parseInt(c);
+                  return !isNaN(num) && num >= 0 && num <= 20;
+                });
+
+                if (allSmallNumbers && nextRow.filter(c => c?.trim()).length > 2) {
+                  dataStartRow++;
+                  continue;
+                }
+
+                // Check if we've reached actual numeric data
+                if (firstVal && !isNaN(parseFloat(firstVal))) {
+                  break;
+                }
+
                 dataStartRow++;
               }
               break;
@@ -260,23 +413,30 @@ export async function parseCSV(file: File): Promise<ParsedCSV> {
           }
 
           if (headers.length === 0) {
-            throw new Error('Could not find column headers in CSV file');
+            throw new Error('Could not find column headers in CSV file. Expected headers like Time, RPM, GPS_Speed, etc.');
           }
 
           // Parse metadata from rows before headers
           const metadataRows = allRows.slice(0, dataStartRow - 1);
           const metadata = parseAIMMetadata(metadataRows);
 
-          // Build channel mapping
+          // Build channel mapping with auto-detection
           const channelMapping = buildChannelMapping(headers);
 
           // Parse data rows into objects
           const dataRows = allRows.slice(dataStartRow)
-            .filter(row => row && row.length >= headers.length && row[0] !== '')
+            .filter(row => {
+              if (!row || row.length < Math.min(3, headers.length)) return false;
+              const firstVal = row[0]?.replace(/"/g, '').trim();
+              // Must have a numeric first value (time)
+              return firstVal !== '' && !isNaN(parseFloat(firstVal));
+            })
             .map(row => {
               const obj: Record<string, string> = {};
               headers.forEach((header, i) => {
-                obj[header] = row[i]?.replace(/"/g, '') || '';
+                if (header) {
+                  obj[header] = row[i]?.replace(/"/g, '').trim() || '';
+                }
               });
               return obj;
             });
@@ -317,6 +477,14 @@ export async function parseCSV(file: File): Promise<ParsedCSV> {
 
           // Extract lap information
           const laps = extractLaps(telemetryData, metadata);
+
+          console.log('Parsed CSV:', {
+            headers,
+            channelMapping,
+            dataRowCount: dataRows.length,
+            lapCount: laps.length,
+            metadata
+          });
 
           resolve({
             data: telemetryData,

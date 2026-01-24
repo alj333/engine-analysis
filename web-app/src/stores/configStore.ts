@@ -12,20 +12,13 @@ const defaultKart: Kart = {
 };
 
 const defaultEngine: Engine = {
-  id: 'kz-tm-kz10c',
-  name: 'KZ - TM KZ10C',
-  category: 'KZ',
-  inertia: 0.0037986,
+  id: 'iame-x30-senior',
+  name: 'Iame - X30 Senior',
+  category: 'Iame',
+  inertia: 0.0023366,
   gearbox: {
-    primary: { input: 19, output: 75 },
-    gears: [
-      { input: 13, output: 33 },
-      { input: 16, output: 29 },
-      { input: 18, output: 27 },
-      { input: 22, output: 27 },
-      { input: 22, output: 23 },
-      { input: 27, output: 25 },
-    ],
+    primary: { input: 1, output: 1 },
+    gears: [],
   },
 };
 
@@ -40,8 +33,8 @@ const defaultTyre: Tyre = {
 };
 
 const defaultFinalDrive: FinalDrive = {
-  frontSprocket: 11,
-  rearSprocket: 80,
+  frontSprocket: 12,
+  rearSprocket: 81,
 };
 
 const defaultRunConditions: RunConditions = {

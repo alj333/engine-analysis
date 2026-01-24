@@ -1,10 +1,20 @@
-import { useCallback, useRef } from 'react';
-import { Upload, FileText, AlertCircle, CheckCircle, Info } from 'lucide-react';
+import { useCallback, useRef, useState } from 'react';
+import { Upload, FileText, AlertCircle, CheckCircle, Info, Database } from 'lucide-react';
 import { useAcquisitionStore } from '@/stores/acquisitionStore';
 import { parseCSV } from '@/lib/parsers/csvParser';
 
+// Sample files available in public/samples
+const SAMPLE_FILES = [
+  {
+    name: 'esempio.csv',
+    label: 'AIM Example Session',
+    description: 'Sample telemetry data from a kart session',
+  },
+];
+
 export function FileImport() {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [loadingSample, setLoadingSample] = useState(false);
   const {
     fileName,
     metadata,
@@ -17,11 +27,8 @@ export function FileImport() {
     clearData,
   } = useAcquisitionStore();
 
-  const handleFileSelect = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (!file) return;
-
+  const processFile = useCallback(
+    async (file: File) => {
       setLoading(true);
       setError(null);
 
@@ -47,6 +54,39 @@ export function FileImport() {
     [setFileData, setLoading, setError, clearData]
   );
 
+  const handleFileSelect = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      await processFile(file);
+    },
+    [processFile]
+  );
+
+  const handleLoadSample = useCallback(
+    async (sampleName: string) => {
+      setLoadingSample(true);
+      setError(null);
+
+      try {
+        const response = await fetch(`/samples/${sampleName}`);
+        if (!response.ok) {
+          throw new Error(`Failed to load sample file: ${response.statusText}`);
+        }
+
+        const blob = await response.blob();
+        const file = new File([blob], sampleName, { type: 'text/csv' });
+        await processFile(file);
+      } catch (err) {
+        console.error('Sample loading error:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load sample file');
+      } finally {
+        setLoadingSample(false);
+      }
+    },
+    [processFile, setError]
+  );
+
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
@@ -65,6 +105,8 @@ export function FileImport() {
     event.preventDefault();
   }, []);
 
+  const isLoadingAny = isLoading || loadingSample;
+
   return (
     <div className="space-y-3">
       <input
@@ -77,18 +119,20 @@ export function FileImport() {
 
       {/* Drop Zone */}
       <div
-        onClick={() => fileInputRef.current?.click()}
+        onClick={() => !isLoadingAny && fileInputRef.current?.click()}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         className={`
           border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors
-          ${isLoading ? 'border-yellow-500 bg-yellow-500/10' : 'border-slate-600 hover:border-cyan-500 hover:bg-cyan-500/5'}
+          ${isLoadingAny ? 'border-yellow-500 bg-yellow-500/10 cursor-wait' : 'border-slate-600 hover:border-cyan-500 hover:bg-cyan-500/5'}
         `}
       >
-        {isLoading ? (
+        {isLoadingAny ? (
           <div className="flex flex-col items-center gap-2">
             <div className="animate-spin rounded-full h-8 w-8 border-2 border-yellow-500 border-t-transparent" />
-            <span className="text-sm text-slate-400">Parsing CSV file...</span>
+            <span className="text-sm text-slate-400">
+              {loadingSample ? 'Loading sample data...' : 'Parsing CSV file...'}
+            </span>
           </div>
         ) : fileName ? (
           <div className="flex flex-col items-center gap-2">
@@ -108,6 +152,29 @@ export function FileImport() {
           </div>
         )}
       </div>
+
+      {/* Sample Data Buttons */}
+      {!fileName && !isLoadingAny && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <Database size={14} />
+            <span>Or load sample data:</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {SAMPLE_FILES.map((sample) => (
+              <button
+                key={sample.name}
+                onClick={() => handleLoadSample(sample.name)}
+                className="px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm text-slate-300 transition-colors flex items-center gap-2"
+                title={sample.description}
+              >
+                <FileText size={14} className="text-cyan-500" />
+                {sample.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Error Message */}
       {error && (

@@ -172,7 +172,7 @@ export function PowerCurve({ data, comparison, showTorque = true }: PowerCurvePr
   };
 
   return (
-    <div className="h-80">
+    <div className="h-[640px]">
       <Line data={chartData} options={options} />
     </div>
   );

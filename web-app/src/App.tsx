@@ -55,10 +55,11 @@ function App() {
     laps,
     selectedLaps,
     headers,
+    clearData: clearAcquisitionData,
   } = useAcquisitionStore();
 
   // Results store
-  const { results, comparisonResults, isAnalyzing, setResults, setIsAnalyzing, setAnalysisError } = useResultsStore();
+  const { results, comparisonResults, isAnalyzing, analysisError, setResults, setIsAnalyzing, setAnalysisError, clearResults } = useResultsStore();
 
   // Handlers
   const handleStart = useCallback(() => {
@@ -73,6 +74,14 @@ function App() {
     // Run analysis in a setTimeout to allow UI to update
     setTimeout(() => {
       try {
+        console.log('Starting analysis with config:', {
+          engine: engine.name,
+          isDirectDrive: !engine.gearbox.gears || engine.gearbox.gears.length === 0,
+          finalRatio: finalDrive.rearSprocket / finalDrive.frontSprocket,
+          selectedLaps,
+          rpmRange: { min: minRpm, max: maxRpm },
+        });
+
         const analysisResults = runAnalysis(
           rawData,
           laps,
@@ -89,8 +98,14 @@ function App() {
           }
         );
 
+        console.log('Analysis results:', {
+          rawDataPoints: analysisResults.rawDataPoints,
+          binnedResultsCount: analysisResults.binnedResults.length,
+          peakPower: analysisResults.statistics.peakPower,
+        });
+
         if (analysisResults.binnedResults.length === 0) {
-          setAnalysisError('No valid data points found. Check your configuration and lap selection.');
+          setAnalysisError(`No valid data points found. The selected engine "${engine.name}" may not match your telemetry data. For direct-drive karts (X30, Rotax, OK, etc.), select a direct-drive engine. For shifter karts (KZ), select a KZ engine.`);
         } else {
           setResults(analysisResults);
           setActiveView('output');
@@ -105,6 +120,12 @@ function App() {
   }, [rawData, laps, selectedLaps, kart, engine, tyre, finalDrive, runConditions, minRpm, maxRpm, filterLevel, setResults, setIsAnalyzing, setAnalysisError]);
 
   const handleOutput = () => setActiveView('output');
+  const handleBack = () => setActiveView('input');
+  const handleReset = useCallback(() => {
+    clearAcquisitionData();
+    clearResults();
+    setActiveView('input');
+  }, [clearAcquisitionData, clearResults]);
   const handleSave = () => console.log('Save session');
   const handleOpen = () => console.log('Open session');
   const handlePrint = () => window.print();
@@ -158,6 +179,8 @@ function App() {
       <Header
         onStart={handleStart}
         onOutput={handleOutput}
+        onBack={handleBack}
+        onReset={handleReset}
         onSave={handleSave}
         onOpen={handleOpen}
         onPrint={handlePrint}
@@ -167,6 +190,7 @@ function App() {
         isAnalyzing={isAnalyzing}
         hasResults={!!results}
         hasComparison={!!comparisonResults}
+        activeView={activeView}
       />
 
       <div className="flex-1 flex overflow-hidden">
@@ -408,6 +432,19 @@ function App() {
                 )}
               </div>
 
+              {/* Analysis Error */}
+              {analysisError && (
+                <div className="card border border-red-500/50 bg-red-500/10">
+                  <div className="flex items-center gap-2 text-red-400">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="font-medium">Analysis Error</span>
+                  </div>
+                  <p className="mt-2 text-slate-300 text-sm">{analysisError}</p>
+                </div>
+              )}
+
               {/* Quick Start Guide */}
               <div className="card bg-slate-800/50">
                 <h3 className="text-lg font-semibold text-slate-300 mb-3">Quick Start</h3>
@@ -480,27 +517,12 @@ function App() {
                     </div>
                   </div>
 
-                  {/* Back to input button */}
-                  <div className="text-center">
-                    <button
-                      onClick={() => setActiveView('input')}
-                      className="btn btn-outline"
-                    >
-                      Back to Input
-                    </button>
-                  </div>
                 </>
               ) : (
                 <div className="card">
                   <div className="text-center py-12 text-slate-500">
                     <BarChart3 size={48} className="mx-auto mb-4 opacity-50" />
                     <p>No results yet. Run an analysis to see power curves.</p>
-                    <button
-                      onClick={() => setActiveView('input')}
-                      className="btn btn-outline mt-4"
-                    >
-                      Go to Input
-                    </button>
                   </div>
                 </div>
               )}

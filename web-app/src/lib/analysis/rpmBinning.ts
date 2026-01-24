@@ -34,8 +34,8 @@ export function binByRPM(
   const binnedResults: BinnedResult[] = [];
 
   for (const [rpm, samples] of bins.entries()) {
-    // Need minimum samples for reliable data
-    if (samples.length < 3) continue;
+    // Need minimum samples for reliable data (reduced from 3 to 1 for flexibility)
+    if (samples.length < 1) continue;
 
     // Calculate averages
     const avgPower = average(samples.map(s => s.power));

@@ -8,11 +8,15 @@ import {
   Info,
   FileUp,
   GitCompare,
+  ArrowLeft,
+  RotateCcw,
 } from 'lucide-react';
 
 interface HeaderProps {
   onStart: () => void;
   onOutput: () => void;
+  onBack: () => void;
+  onReset: () => void;
   onSave: () => void;
   onOpen: () => void;
   onPrint: () => void;
@@ -22,11 +26,14 @@ interface HeaderProps {
   isAnalyzing: boolean;
   hasResults: boolean;
   hasComparison: boolean;
+  activeView: 'input' | 'output';
 }
 
 export function Header({
   onStart,
   onOutput,
+  onBack,
+  onReset,
   onSave,
   onOpen,
   onPrint,
@@ -36,6 +43,7 @@ export function Header({
   isAnalyzing,
   hasResults,
   hasComparison,
+  activeView,
 }: HeaderProps) {
   const [showInfo, setShowInfo] = useState(false);
 
@@ -66,6 +74,17 @@ export function Header({
               <span className="hidden sm:inline">Open</span>
             </button>
 
+            {activeView === 'output' && (
+              <button
+                onClick={onBack}
+                className="flex items-center gap-2 px-3 py-2 rounded hover:bg-slate-700 text-slate-300"
+                title="Back to setup"
+              >
+                <ArrowLeft size={18} />
+                <span className="hidden sm:inline">Back</span>
+              </button>
+            )}
+
             <button
               onClick={onStart}
               disabled={isAnalyzing}
@@ -84,6 +103,15 @@ export function Header({
             >
               <BarChart3 size={18} />
               <span className="hidden sm:inline">OUTPUT</span>
+            </button>
+
+            <button
+              onClick={onReset}
+              className="flex items-center gap-2 px-3 py-2 rounded hover:bg-red-500/20 text-red-400"
+              title="Reset all data"
+            >
+              <RotateCcw size={18} />
+              <span className="hidden sm:inline">Reset</span>
             </button>
 
             <button
