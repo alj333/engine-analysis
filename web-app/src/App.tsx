@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Header } from '@/components/layout/Header';
 import {
   Sidebar,
@@ -11,11 +11,16 @@ import {
 } from '@/components/layout/Sidebar';
 import { Select, NumberInput, Slider, FieldGroup, GearInput } from '@/components/common/FormFields';
 import { FileImport } from '@/components/acquisition/FileImport';
+import { ChannelMapping } from '@/components/acquisition/ChannelMapping';
+import { LapSelector } from '@/components/acquisition/LapSelector';
+import { PowerCurve } from '@/components/results/PowerCurve';
+import { ResultsSummary } from '@/components/results/ResultsSummary';
 import { useConfigStore } from '@/stores/configStore';
 import { useAcquisitionStore } from '@/stores/acquisitionStore';
 import { useResultsStore } from '@/stores/resultsStore';
 import { useLoadConfigs } from '@/hooks/useLoadConfigs';
-import { Laptop, BarChart3, Loader2 } from 'lucide-react';
+import { runAnalysis } from '@/lib/analysis/powerCalculation';
+import { Laptop, BarChart3, Loader2, Flag, Settings } from 'lucide-react';
 
 function App() {
   const { isLoading: configsLoading, error: configsError } = useLoadConfigs();
@@ -39,17 +44,65 @@ function App() {
   } = useConfigStore();
 
   // Acquisition store
-  const { filterLevel, minRpm, maxRpm, setFilterLevel, setMinRpm, setMaxRpm } =
-    useAcquisitionStore();
+  const {
+    filterLevel,
+    minRpm,
+    maxRpm,
+    setFilterLevel,
+    setMinRpm,
+    setMaxRpm,
+    rawData,
+    laps,
+    selectedLaps,
+    headers,
+  } = useAcquisitionStore();
 
   // Results store
-  const { results, comparisonResults, isAnalyzing } = useResultsStore();
+  const { results, comparisonResults, isAnalyzing, setResults, setIsAnalyzing, setAnalysisError } = useResultsStore();
 
   // Handlers
-  const handleStart = () => {
-    console.log('Starting analysis...');
-    // Will be implemented in Phase 4
-  };
+  const handleStart = useCallback(() => {
+    if (!rawData || selectedLaps.length === 0) {
+      setAnalysisError('Please import a CSV file and select laps to analyze');
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setAnalysisError(null);
+
+    // Run analysis in a setTimeout to allow UI to update
+    setTimeout(() => {
+      try {
+        const analysisResults = runAnalysis(
+          rawData,
+          laps,
+          selectedLaps,
+          {
+            kart,
+            engine,
+            tyre,
+            finalDrive,
+            runConditions,
+            minRpm,
+            maxRpm,
+            filterLevel,
+          }
+        );
+
+        if (analysisResults.binnedResults.length === 0) {
+          setAnalysisError('No valid data points found. Check your configuration and lap selection.');
+        } else {
+          setResults(analysisResults);
+          setActiveView('output');
+        }
+      } catch (err) {
+        console.error('Analysis error:', err);
+        setAnalysisError(err instanceof Error ? err.message : 'Analysis failed');
+      } finally {
+        setIsAnalyzing(false);
+      }
+    }, 50);
+  }, [rawData, laps, selectedLaps, kart, engine, tyre, finalDrive, runConditions, minRpm, maxRpm, filterLevel, setResults, setIsAnalyzing, setAnalysisError]);
 
   const handleOutput = () => setActiveView('output');
   const handleSave = () => console.log('Save session');
@@ -329,12 +382,30 @@ function App() {
                 <FileImport />
               </div>
 
-              {/* Lap Selection will go here (Phase 3) */}
-              <div className="card opacity-50">
-                <h2 className="section-title text-cyan-500">LAP SELECTION</h2>
-                <p className="text-slate-500 text-sm">
-                  Import a CSV file to select laps for analysis
-                </p>
+              {/* Channel Mapping */}
+              {headers.length > 0 && (
+                <div className="card">
+                  <h2 className="section-title text-cyan-500">
+                    <Settings size={20} />
+                    CHANNEL MAPPING
+                  </h2>
+                  <ChannelMapping />
+                </div>
+              )}
+
+              {/* Lap Selection */}
+              <div className={`card ${!rawData ? 'opacity-50' : ''}`}>
+                <h2 className="section-title text-cyan-500">
+                  <Flag size={20} />
+                  LAP SELECTION
+                </h2>
+                {rawData ? (
+                  <LapSelector />
+                ) : (
+                  <p className="text-slate-500 text-sm text-center py-4">
+                    Import a CSV file to select laps for analysis
+                  </p>
+                )}
               </div>
 
               {/* Quick Start Guide */}
@@ -353,18 +424,74 @@ function App() {
             </div>
           ) : (
             <div className="max-w-6xl mx-auto space-y-6">
-              {/* Results View */}
-              <div className="card">
-                <h2 className="section-title">
-                  <BarChart3 size={20} />
-                  RESULTS
-                </h2>
-                {results ? (
-                  <div className="text-slate-400">
-                    {/* Charts will be implemented in Phase 5 */}
-                    <p>Power curve and results will be displayed here</p>
+              {results ? (
+                <>
+                  {/* Results Summary */}
+                  <ResultsSummary
+                    statistics={results.statistics}
+                    configInfo={results.config}
+                    timestamp={results.timestamp}
+                  />
+
+                  {/* Power Curve Chart */}
+                  <div className="card">
+                    <h2 className="section-title">
+                      <BarChart3 size={20} />
+                      POWER & TORQUE CURVE
+                    </h2>
+                    <PowerCurve
+                      data={results.binnedResults}
+                      comparison={comparisonResults?.binnedResults}
+                    />
                   </div>
-                ) : (
+
+                  {/* Data table */}
+                  <div className="card">
+                    <h2 className="section-title">
+                      <BarChart3 size={20} />
+                      DATA TABLE
+                    </h2>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="text-slate-400 border-b border-slate-700">
+                            <th className="text-left p-2">RPM</th>
+                            <th className="text-right p-2">Power (CV)</th>
+                            <th className="text-right p-2">Torque (N·m)</th>
+                            <th className="text-right p-2">Speed (km/h)</th>
+                            <th className="text-right p-2">Samples</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {results.binnedResults.map((row, i) => (
+                            <tr
+                              key={i}
+                              className="border-b border-slate-800 hover:bg-slate-800/50"
+                            >
+                              <td className="p-2 text-slate-300">{row.rpm}</td>
+                              <td className="p-2 text-right text-red-400">{row.avgPower.toFixed(2)}</td>
+                              <td className="p-2 text-right text-blue-400">{row.avgTorque.toFixed(2)}</td>
+                              <td className="p-2 text-right text-slate-400">{row.avgSpeed.toFixed(1)}</td>
+                              <td className="p-2 text-right text-slate-500">{row.sampleCount}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Back to input button */}
+                  <div className="text-center">
+                    <button
+                      onClick={() => setActiveView('input')}
+                      className="btn btn-outline"
+                    >
+                      Back to Input
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="card">
                   <div className="text-center py-12 text-slate-500">
                     <BarChart3 size={48} className="mx-auto mb-4 opacity-50" />
                     <p>No results yet. Run an analysis to see power curves.</p>
@@ -375,8 +502,8 @@ function App() {
                       Go to Input
                     </button>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           )}
         </main>

@@ -10,6 +10,7 @@ interface ResultsState {
 
   // UI state
   isAnalyzing: boolean;
+  analysisError: string | null;
   activeChart: ChartType;
   selectedLapForTelemetry: number;
 
@@ -17,6 +18,7 @@ interface ResultsState {
   setResults: (results: AnalysisResults) => void;
   setComparisonResults: (results: AnalysisResults | null) => void;
   setIsAnalyzing: (analyzing: boolean) => void;
+  setAnalysisError: (error: string | null) => void;
   setActiveChart: (chart: ChartType) => void;
   setSelectedLapForTelemetry: (lapIndex: number) => void;
   clearResults: () => void;
@@ -42,13 +44,15 @@ export const useResultsStore = create<ResultsState>((set) => ({
   results: null,
   comparisonResults: null,
   isAnalyzing: false,
+  analysisError: null,
   activeChart: 'power',
   selectedLapForTelemetry: 0,
 
   // Actions
-  setResults: (results) => set({ results }),
+  setResults: (results) => set({ results, analysisError: null }),
   setComparisonResults: (comparisonResults) => set({ comparisonResults }),
   setIsAnalyzing: (isAnalyzing) => set({ isAnalyzing }),
+  setAnalysisError: (analysisError) => set({ analysisError, isAnalyzing: false }),
   setActiveChart: (activeChart) => set({ activeChart }),
   setSelectedLapForTelemetry: (selectedLapForTelemetry) => set({ selectedLapForTelemetry }),
 
@@ -56,6 +60,7 @@ export const useResultsStore = create<ResultsState>((set) => ({
     set({
       results: null,
       isAnalyzing: false,
+      analysisError: null,
     }),
 
   clearComparison: () => set({ comparisonResults: null }),
@@ -64,12 +69,12 @@ export const useResultsStore = create<ResultsState>((set) => ({
 // Selector hooks for common data patterns
 export const usePowerCurve = (): BinnedResult[] => {
   const results = useResultsStore((state) => state.results);
-  return results?.powerCurve ?? [];
+  return results?.binnedResults ?? [];
 };
 
 export const useComparisonPowerCurve = (): BinnedResult[] => {
   const results = useResultsStore((state) => state.comparisonResults);
-  return results?.powerCurve ?? [];
+  return results?.binnedResults ?? [];
 };
 
 export const useLapTelemetry = (): LapTelemetryResult[] => {
@@ -80,7 +85,12 @@ export const useLapTelemetry = (): LapTelemetryResult[] => {
 export const usePeakValues = () => {
   const results = useResultsStore((state) => state.results);
   return {
-    peakPower: results?.peakPower ?? { value: 0, rpm: 0 },
-    peakTorque: results?.peakTorque ?? { value: 0, rpm: 0 },
+    peakPower: results?.statistics.peakPower ?? { rpm: 0, power: 0 },
+    peakTorque: results?.statistics.peakTorque ?? { rpm: 0, torque: 0 },
   };
+};
+
+export const useStatistics = () => {
+  const results = useResultsStore((state) => state.results);
+  return results?.statistics ?? null;
 };
