@@ -1,0 +1,150 @@
+{
+  "channelMappings": {
+    "time": [
+      "Time",
+      "time",
+      "Time(sec)",
+      "Time_s",
+      "RunningLapTime",
+      "Lap Time",
+      "lap time [s]",
+      "Time [s]"
+    ],
+    "distance": [
+      "Distance",
+      "distance",
+      "Space",
+      "space",
+      "Lap Distance[m]",
+      "GPS_Distance",
+      "GPS Distance"
+    ],
+    "speed": [
+      "GPS_Speed",
+      "Speed",
+      "SpeedGPS",
+      "GPS Speed",
+      "SPEEDG_Kph",
+      "V_Front",
+      "speed",
+      "XKart Speed[kph]",
+      "GPS_Speed[km/h]",
+      "GPS Speed[km/h]"
+    ],
+    "rpm": [
+      "RPM",
+      "Engine",
+      "Rpm",
+      "rpm",
+      "engine speed",
+      "XKart RPM[rpm]",
+      "RPM_F",
+      "Engine Speed",
+      "Engine RPM"
+    ],
+    "latAcc": [
+      "GPS_LatAcc",
+      "A. Lat.",
+      "Ay",
+      "acc_lat",
+      "GX[G]",
+      "ACC_CG_NF",
+      "GPS Lat.",
+      "Lateral Acc",
+      "Lat Acc",
+      "LatAcc"
+    ],
+    "lonAcc": [
+      "GPS_LonAcc",
+      "A. Long.",
+      "Ax",
+      "acc_lon",
+      "GY[G]",
+      "ACC_X",
+      "GPS Long.",
+      "Longitudinal Acc",
+      "Lon Acc",
+      "LonAcc"
+    ],
+    "slope": [
+      "GPS_Slope",
+      "slope",
+      "Slope",
+      "Track Slope"
+    ],
+    "tempHead": [
+      "temp_head",
+      "Head Temp",
+      "HeadTemp",
+      "Temperature 1",
+      "Temp1",
+      "CHT",
+      "Cylinder Head Temp"
+    ],
+    "tempCool": [
+      "temp_cool",
+      "Water Temp",
+      "WaterTemp",
+      "Coolant",
+      "Temperature 2",
+      "Temp2",
+      "Coolant Temp",
+      "Water"
+    ],
+    "tempExhaust": [
+      "temp_exhaust",
+      "Exhaust Temp",
+      "ExhaustTemp",
+      "EGT",
+      "Exhaust Gas Temp",
+      "Temperature 3",
+      "Temp3"
+    ],
+    "lambda": [
+      "lambda",
+      "Lambda",
+      "AFR",
+      "Air Fuel Ratio",
+      "Lambda_Temp",
+      "O2"
+    ],
+    "throttle": [
+      "Throttle",
+      "throttle",
+      "TPS",
+      "Throttle Position",
+      "PosAcceleratore",
+      "Accelerator"
+    ],
+    "lap": [
+      "Lap",
+      "lap",
+      "Lap Number",
+      "LAP",
+      "Lap #"
+    ],
+    "latitude": [
+      "Latitude",
+      "latitude",
+      "lat",
+      "x_gps",
+      "GPS_Lat",
+      "LATITUDE_deg"
+    ],
+    "longitude": [
+      "Longitude",
+      "longitude",
+      "lon",
+      "y_gps",
+      "GPS_Lon",
+      "LONGITUDE_deg"
+    ],
+    "altitude": [
+      "Altitude",
+      "altitude",
+      "GPS_Altitude",
+      "ANTALT_m",
+      "Alt"
+    ]
+  }
+}

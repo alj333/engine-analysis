@@ -1,0 +1,504 @@
+{
+  "tyres": [
+    {
+      "id": "bridgestone-yfd-alluminio",
+      "name": "Bridgestone YFD - Alluminio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0268,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "bridgestone-yfd-magnesio",
+      "name": "Bridgestone YFD - Magnesio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0259,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "bridgestone-yjl-alluminio",
+      "name": "Bridgestone YJL - Alluminio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0196,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "bridgestone-yjl-magnesio",
+      "name": "Bridgestone YJL - Magnesio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0188,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "bridgestone-ylp-alluminio",
+      "name": "Bridgestone YLP - Alluminio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0272,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "bridgestone-ylp-magnesio",
+      "name": "Bridgestone YLP - Magnesio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0262,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "bridgestone-ylr-alluminio",
+      "name": "Bridgestone YLR - Alluminio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "bridgestone-ylr-magnesio",
+      "name": "Bridgestone YLR - Magnesio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "bridgestone-ynb-alluminio",
+      "name": "Bridgestone YNB - Alluminio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "bridgestone-ynb-magnesio",
+      "name": "Bridgestone YNB - Magnesio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "bridgestone-ynp-alluminio",
+      "name": "Bridgestone YNP - Alluminio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0272,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "bridgestone-ynp-magnesio",
+      "name": "Bridgestone YNP - Magnesio",
+      "brand": "Bridgestone",
+      "diameter": 279.4,
+      "inertia": 0.0262,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "dunlop-dfm-alluminio",
+      "name": "Dunlop DFM - Alluminio",
+      "brand": "Dunlop",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "dunlop-dfm-magnesio",
+      "name": "Dunlop DFM - Magnesio",
+      "brand": "Dunlop",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "komet-k1-h-alluminio",
+      "name": "Komet K1-H - Alluminio",
+      "brand": "Komet",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "komet-k1-h-magnesio",
+      "name": "Komet K1-H - Magnesio",
+      "brand": "Komet",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "komet-k1-m-alluminio",
+      "name": "Komet K1-M - Alluminio",
+      "brand": "Komet",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "komet-k1-m-magnesio",
+      "name": "Komet K1-M - Magnesio",
+      "brand": "Komet",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "komet-k1-w-alluminio",
+      "name": "Komet K1-W - Alluminio",
+      "brand": "Komet",
+      "diameter": 279.4,
+      "inertia": 0.0272,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "komet-k1-w-magnesio",
+      "name": "Komet K1-W - Magnesio",
+      "brand": "Komet",
+      "diameter": 279.4,
+      "inertia": 0.0262,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "komet-k1d-m-alluminio",
+      "name": "Komet K1D-M - Alluminio",
+      "brand": "Komet",
+      "diameter": 279.4,
+      "inertia": 0.0196,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "komet-k1d-m-magnesio",
+      "name": "Komet K1D-M - Magnesio",
+      "brand": "Komet",
+      "diameter": 279.4,
+      "inertia": 0.0188,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "komet-k1d-w-alluminio",
+      "name": "Komet K1D-W - Alluminio",
+      "brand": "Komet",
+      "diameter": 279.4,
+      "inertia": 0.0268,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "komet-k1d-w-magnesio",
+      "name": "Komet K1D-W - Magnesio",
+      "brand": "Komet",
+      "diameter": 279.4,
+      "inertia": 0.0259,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "lecont-lo-alluminio",
+      "name": "Lecont LO - Alluminio",
+      "brand": "Lecont",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "lecont-lo-magnesio",
+      "name": "Lecont LO - Magnesio",
+      "brand": "Lecont",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "lecont-lw-alluminio",
+      "name": "Lecont LW - Alluminio",
+      "brand": "Lecont",
+      "diameter": 279.4,
+      "inertia": 0.0272,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "lecont-lw-magnesio",
+      "name": "Lecont LW - Magnesio",
+      "brand": "Lecont",
+      "diameter": 279.4,
+      "inertia": 0.0262,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "mojo-c2-alluminio",
+      "name": "Mojo C2 - Alluminio",
+      "brand": "Mojo",
+      "diameter": 279.4,
+      "inertia": 0.0196,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "mojo-c2-magnesio",
+      "name": "Mojo C2 - Magnesio",
+      "brand": "Mojo",
+      "diameter": 279.4,
+      "inertia": 0.0188,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "mojo-cw-alluminio",
+      "name": "Mojo CW - Alluminio",
+      "brand": "Mojo",
+      "diameter": 279.4,
+      "inertia": 0.0268,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "mojo-cw-magnesio",
+      "name": "Mojo CW - Magnesio",
+      "brand": "Mojo",
+      "diameter": 279.4,
+      "inertia": 0.0259,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "mojo-d2-alluminio",
+      "name": "Mojo D2 - Alluminio",
+      "brand": "Mojo",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "mojo-d2-magnesio",
+      "name": "Mojo D2 - Magnesio",
+      "brand": "Mojo",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "mojo-d4-alluminio",
+      "name": "Mojo D4 - Alluminio",
+      "brand": "Mojo",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "mojo-d4-magnesio",
+      "name": "Mojo D4 - Magnesio",
+      "brand": "Mojo",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "mojo-w3-alluminio",
+      "name": "Mojo W3 - Alluminio",
+      "brand": "Mojo",
+      "diameter": 279.4,
+      "inertia": 0.0272,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "mojo-w3-magnesio",
+      "name": "Mojo W3 - Magnesio",
+      "brand": "Mojo",
+      "diameter": 279.4,
+      "inertia": 0.0262,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "vega-sl10-alluminio",
+      "name": "Vega SL10 - Alluminio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0196,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "vega-sl10-magnesio",
+      "name": "Vega SL10 - Magnesio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0188,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "vega-w5-alluminio",
+      "name": "Vega W5 - Alluminio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0272,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "vega-w5-magnesio",
+      "name": "Vega W5 - Magnesio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0262,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "vega-we-alluminio",
+      "name": "Vega WE - Alluminio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0268,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "vega-we-magnesio",
+      "name": "Vega WE - Magnesio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0259,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "vega-xh2-alluminio",
+      "name": "Vega XH2 - Alluminio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "vega-xh2-magnesio",
+      "name": "Vega XH2 - Magnesio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "vega-xm-alluminio",
+      "name": "Vega XM - Alluminio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "vega-xm-magnesio",
+      "name": "Vega XM - Magnesio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    },
+    {
+      "id": "vega-xp-alluminio",
+      "name": "Vega XP - Alluminio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0279,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "aluminum"
+    },
+    {
+      "id": "vega-xp-magnesio",
+      "name": "Vega XP - Magnesio",
+      "brand": "Vega",
+      "diameter": 279.4,
+      "inertia": 0.0267,
+      "rollingCoeff1": 0.032,
+      "rollingCoeff2": 0.0000095,
+      "rimType": "magnesium"
+    }
+  ]
+}

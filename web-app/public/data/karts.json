@@ -1,0 +1,292 @@
+{
+  "karts": [
+    {
+      "id": "60-baby",
+      "name": "60 Baby",
+      "category": "60cc",
+      "weight": 90,
+      "frontalArea": 0.408,
+      "dragCoefficient": 0.75
+    },
+    {
+      "id": "60-mini",
+      "name": "60 Mini",
+      "category": "60cc",
+      "weight": 110,
+      "frontalArea": 0.408,
+      "dragCoefficient": 0.75
+    },
+    {
+      "id": "easy-kart-60",
+      "name": "Easy Kart - 60",
+      "category": "60cc",
+      "weight": 105,
+      "frontalArea": 0.408,
+      "dragCoefficient": 0.75
+    },
+    {
+      "id": "cadet",
+      "name": "Cadet",
+      "category": "Cadet/Junior",
+      "weight": 110,
+      "frontalArea": 0.408,
+      "dragCoefficient": 0.75
+    },
+    {
+      "id": "ka3-junior",
+      "name": "KA3 Junior",
+      "category": "Cadet/Junior",
+      "weight": 144,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "ka4-heavy",
+      "name": "KA4 Heavy",
+      "category": "Cadet/Junior",
+      "weight": 149,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "ka4-light",
+      "name": "KA4 Light",
+      "category": "Cadet/Junior",
+      "weight": 132,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "young",
+      "name": "Young",
+      "category": "Cadet/Junior",
+      "weight": 120,
+      "frontalArea": 0.408,
+      "dragCoefficient": 0.75
+    },
+    {
+      "id": "easy-kart-100",
+      "name": "Easy Kart - 100",
+      "category": "EasyKart",
+      "weight": 140,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "easy-kart-125",
+      "name": "Easy Kart - 125",
+      "category": "EasyKart",
+      "weight": 160,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "iame-x30-junior",
+      "name": "Iame - X30 Junior",
+      "category": "Iame",
+      "weight": 145,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "iame-x30-mini",
+      "name": "Iame - X30 Mini",
+      "category": "Iame",
+      "weight": 110,
+      "frontalArea": 0.408,
+      "dragCoefficient": 0.75
+    },
+    {
+      "id": "iame-x30-senior",
+      "name": "Iame - X30 Senior",
+      "category": "Iame",
+      "weight": 158,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "iame-x30-shifter",
+      "name": "Iame - X30 Shifter",
+      "category": "Iame",
+      "weight": 180,
+      "frontalArea": 0.5603,
+      "dragCoefficient": 0.89
+    },
+    {
+      "id": "iame-x30-super",
+      "name": "Iame - X30 Super",
+      "category": "Iame",
+      "weight": 165,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "iame-x30-super-shifter",
+      "name": "Iame - X30 Super Shifter",
+      "category": "Iame",
+      "weight": 183,
+      "frontalArea": 0.5603,
+      "dragCoefficient": 0.89
+    },
+    {
+      "id": "kz1",
+      "name": "KZ1",
+      "category": "KZ",
+      "weight": 170,
+      "frontalArea": 0.5603,
+      "dragCoefficient": 0.89
+    },
+    {
+      "id": "kz2",
+      "name": "KZ2",
+      "category": "KZ",
+      "weight": 175,
+      "frontalArea": 0.5603,
+      "dragCoefficient": 0.89
+    },
+    {
+      "id": "kz3-junior",
+      "name": "KZ3 Junior",
+      "category": "KZ",
+      "weight": 175,
+      "frontalArea": 0.5603,
+      "dragCoefficient": 0.89
+    },
+    {
+      "id": "kz3-over",
+      "name": "KZ3 Over",
+      "category": "KZ",
+      "weight": 180,
+      "frontalArea": 0.5603,
+      "dragCoefficient": 0.89
+    },
+    {
+      "id": "kz3-under",
+      "name": "KZ3 Under",
+      "category": "KZ",
+      "weight": 175,
+      "frontalArea": 0.5603,
+      "dragCoefficient": 0.89
+    },
+    {
+      "id": "kz4",
+      "name": "KZ4",
+      "category": "KZ",
+      "weight": 170,
+      "frontalArea": 0.5603,
+      "dragCoefficient": 0.89
+    },
+    {
+      "id": "ok",
+      "name": "OK",
+      "category": "OK",
+      "weight": 145,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "ok-plus",
+      "name": "OK Plus",
+      "category": "OK",
+      "weight": 155,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "okj",
+      "name": "OKJ",
+      "category": "OK",
+      "weight": 140,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "rotax-dd2",
+      "name": "Rotax - DD2",
+      "category": "Rotax",
+      "weight": 165,
+      "frontalArea": 0.5603,
+      "dragCoefficient": 0.89
+    },
+    {
+      "id": "rotax-junior-max",
+      "name": "Rotax - Junior Max",
+      "category": "Rotax",
+      "weight": 145,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "rotax-micro-max",
+      "name": "Rotax - Micro Max",
+      "category": "Rotax",
+      "weight": 110,
+      "frontalArea": 0.408,
+      "dragCoefficient": 0.75
+    },
+    {
+      "id": "rotax-mini-max",
+      "name": "Rotax - Mini Max",
+      "category": "Rotax",
+      "weight": 125,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "rotax-senior-max",
+      "name": "Rotax - Senior Max",
+      "category": "Rotax",
+      "weight": 160,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "vortex-baby-rok",
+      "name": "Vortex - Baby Rok",
+      "category": "Vortex",
+      "weight": 90,
+      "frontalArea": 0.408,
+      "dragCoefficient": 0.75
+    },
+    {
+      "id": "vortex-junior-rok",
+      "name": "Vortex - Junior Rok",
+      "category": "Vortex",
+      "weight": 145,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "vortex-mini-rok",
+      "name": "Vortex - Mini Rok",
+      "category": "Vortex",
+      "weight": 110,
+      "frontalArea": 0.408,
+      "dragCoefficient": 0.75
+    },
+    {
+      "id": "vortex-senior-rok",
+      "name": "Vortex - Senior Rok",
+      "category": "Vortex",
+      "weight": 160,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    },
+    {
+      "id": "vortex-shifter-rok",
+      "name": "Vortex - Shifter Rok",
+      "category": "Vortex",
+      "weight": 180,
+      "frontalArea": 0.5603,
+      "dragCoefficient": 0.89
+    },
+    {
+      "id": "vortex-super-rok",
+      "name": "Vortex - Super Rok",
+      "category": "Vortex",
+      "weight": 155,
+      "frontalArea": 0.5457,
+      "dragCoefficient": 0.85
+    }
+  ]
+}

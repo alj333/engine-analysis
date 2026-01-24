@@ -1,0 +1,19 @@
+{
+  "name": "Engine Analysis",
+  "short_name": "EngineAnalysis",
+  "description": "Kart racing engine telemetry analysis - Calculate power and torque curves from track data",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e293b",
+  "theme_color": "#eab308",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "sports"]
+}
