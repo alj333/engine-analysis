@@ -53,11 +53,12 @@ export function Header({
         {/* Logo and Title */}
         <div className="flex items-center gap-3">
           <div className="bg-yellow-500 text-slate-900 font-bold px-3 py-1 rounded">
-            NT
+            KC
           </div>
           <h1 className="text-xl font-bold text-slate-100">
-            ENGINE ANALYSIS
-            <span className="text-sm font-normal text-slate-400 ml-2">Web</span>
+            <span className="text-yellow-500">Kart-Code.com</span>
+            <span className="text-slate-400 mx-2">-</span>
+            Engine Analysis
           </h1>
         </div>
 
