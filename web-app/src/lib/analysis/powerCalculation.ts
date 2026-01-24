@@ -153,14 +153,15 @@ export function calculatePower(
       // Skip unrealistic values
       if (wheelPowerCV < 0 || wheelPowerCV > 100) continue;
 
-      // Wheel torque
+      // Engine torque = wheel torque / total ratio
       const wheelTorque = wheelForce * wheelRadius;
+      const engineTorque = wheelTorque / totalRatio;
 
       results.push({
         rpm,
         speed: speedKmh,
         power: wheelPowerCV,
-        torque: wheelTorque,
+        torque: engineTorque,
         gear,
         tempHead: lapData.tempHead[i] || 0,
         tempCool: lapData.tempCool[i] || 0,
