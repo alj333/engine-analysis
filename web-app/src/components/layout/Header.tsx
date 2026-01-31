@@ -10,6 +10,7 @@ import {
   GitCompare,
   ArrowLeft,
   RotateCcw,
+  Smartphone,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -23,10 +24,11 @@ interface HeaderProps {
   onLoadFile1: () => void;
   onLoadFile2: () => void;
   onCompare: () => void;
+  onSensor: () => void;
   isAnalyzing: boolean;
   hasResults: boolean;
   hasComparison: boolean;
-  activeView: 'input' | 'output';
+  activeView: 'input' | 'output' | 'sensor';
 }
 
 export function Header({
@@ -40,6 +42,7 @@ export function Header({
   onLoadFile1,
   onLoadFile2,
   onCompare,
+  onSensor,
   isAnalyzing,
   hasResults,
   hasComparison,
@@ -133,6 +136,15 @@ export function Header({
             >
               <Printer size={18} />
               <span className="hidden sm:inline">Print</span>
+            </button>
+
+            <button
+              onClick={onSensor}
+              className="flex items-center gap-2 px-3 py-2 rounded bg-cyan-600 text-white hover:bg-cyan-500"
+              title="Mobile sensor recording"
+            >
+              <Smartphone size={18} />
+              <span className="hidden sm:inline">Sensor</span>
             </button>
 
             <button

@@ -1,5 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie';
 import type { Session } from '@/types/results';
+import type { SensorSession } from '@/types/sensor';
 
 // Custom config types with numeric IDs for IndexedDB
 interface CustomKart {
@@ -37,6 +38,7 @@ export const db = new Dexie('EngineAnalysisDB') as Dexie & {
   customKarts: EntityTable<CustomKart, 'id'>;
   customEngines: EntityTable<CustomEngine, 'id'>;
   customTyres: EntityTable<CustomTyre, 'id'>;
+  sensorSessions: EntityTable<SensorSession, 'id'>;
 };
 
 db.version(1).stores({
@@ -44,6 +46,15 @@ db.version(1).stores({
   customKarts: '++id, name',
   customEngines: '++id, name',
   customTyres: '++id, name',
+});
+
+// Version 2: Add sensor sessions table
+db.version(2).stores({
+  sessions: '++id, name, createdAt, updatedAt',
+  customKarts: '++id, name',
+  customEngines: '++id, name',
+  customTyres: '++id, name',
+  sensorSessions: '++id, name, createdAt, updatedAt',
 });
 
 // Session operations
@@ -106,6 +117,33 @@ export async function getCustomTyres(): Promise<CustomTyre[]> {
 
 export async function deleteCustomTyre(id: number): Promise<void> {
   await db.customTyres.delete(id);
+}
+
+// Sensor session operations
+export async function saveSensorSession(
+  session: Omit<SensorSession, 'id'>
+): Promise<number> {
+  const id = await db.sensorSessions.add(session as SensorSession);
+  return id as number;
+}
+
+export async function updateSensorSession(
+  id: number,
+  updates: Partial<SensorSession>
+): Promise<void> {
+  await db.sensorSessions.update(id, { ...updates, updatedAt: new Date() });
+}
+
+export async function getSensorSession(id: number): Promise<SensorSession | undefined> {
+  return await db.sensorSessions.get(id);
+}
+
+export async function getAllSensorSessions(): Promise<SensorSession[]> {
+  return await db.sensorSessions.orderBy('updatedAt').reverse().toArray();
+}
+
+export async function deleteSensorSession(id: number): Promise<void> {
+  await db.sensorSessions.delete(id);
 }
 
 export type { CustomKart, CustomEngine, CustomTyre };

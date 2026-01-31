@@ -15,6 +15,7 @@ import { ChannelMapping } from '@/components/acquisition/ChannelMapping';
 import { LapSelector } from '@/components/acquisition/LapSelector';
 import { PowerCurve } from '@/components/results/PowerCurve';
 import { ResultsSummary } from '@/components/results/ResultsSummary';
+import { SensorRecordingView } from '@/components/sensor/SensorRecordingView';
 import { useConfigStore } from '@/stores/configStore';
 import { useAcquisitionStore } from '@/stores/acquisitionStore';
 import { useResultsStore } from '@/stores/resultsStore';
@@ -24,7 +25,7 @@ import { Laptop, BarChart3, Loader2, Flag, Settings } from 'lucide-react';
 
 function App() {
   const { isLoading: configsLoading, error: configsError } = useLoadConfigs();
-  const [activeView, setActiveView] = useState<'input' | 'output'>('input');
+  const [activeView, setActiveView] = useState<'input' | 'output' | 'sensor'>('input');
 
   // Config store
   const {
@@ -121,6 +122,8 @@ function App() {
 
   const handleOutput = () => setActiveView('output');
   const handleBack = () => setActiveView('input');
+  const handleSensor = () => setActiveView('sensor');
+  const handleBackFromSensor = () => setActiveView('input');
   const handleReset = useCallback(() => {
     clearAcquisitionData();
     clearResults();
@@ -174,6 +177,11 @@ function App() {
     group: (t as unknown as { brand?: string }).brand || 'Other',
   }));
 
+  // Render sensor mode as full-screen
+  if (activeView === 'sensor') {
+    return <SensorRecordingView onBack={handleBackFromSensor} />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header
@@ -187,6 +195,7 @@ function App() {
         onLoadFile1={handleLoadFile1}
         onLoadFile2={handleLoadFile2}
         onCompare={handleCompare}
+        onSensor={handleSensor}
         isAnalyzing={isAnalyzing}
         hasResults={!!results}
         hasComparison={!!comparisonResults}
