@@ -12,6 +12,7 @@ import {
   RotateCcw,
   Smartphone,
 } from 'lucide-react';
+import { UserMenu } from '../auth';
 
 interface HeaderProps {
   onStart: () => void;
@@ -25,6 +26,7 @@ interface HeaderProps {
   onLoadFile2: () => void;
   onCompare: () => void;
   onSensor: () => void;
+  onSignIn?: () => void;
   isAnalyzing: boolean;
   hasResults: boolean;
   hasComparison: boolean;
@@ -43,6 +45,7 @@ export function Header({
   onLoadFile2,
   onCompare,
   onSensor,
+  onSignIn,
   isAnalyzing,
   hasResults,
   hasComparison,
@@ -185,6 +188,11 @@ export function Header({
               <GitCompare size={16} />
               <span className="text-sm">Comp</span>
             </button>
+          </div>
+
+          {/* User Menu */}
+          <div className="ml-4">
+            <UserMenu onSignIn={onSignIn} />
           </div>
         </div>
       </div>

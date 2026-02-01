@@ -1,0 +1,18 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+
+# Local config with API keys
+Config.local.xcconfig
+
+# CocoaPods
+Pods/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# macOS
+.DS_Store

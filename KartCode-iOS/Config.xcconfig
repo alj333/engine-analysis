@@ -1,0 +1,18 @@
+// Configuration settings for KartCode iOS app
+// Copy this file to Config.local.xcconfig and add your API keys
+
+// Clerk publishable key (get from https://dashboard.clerk.com)
+CLERK_PUBLISHABLE_KEY = pk_test_YOUR_KEY_HERE
+
+// Convex deployment URL (get from Convex dashboard after running npx convex dev)
+CONVEX_URL = https://your-deployment.convex.cloud
+
+// Bundle identifier
+PRODUCT_BUNDLE_IDENTIFIER = com.kartcode.ios
+
+// App version
+MARKETING_VERSION = 1.0.0
+CURRENT_PROJECT_VERSION = 1
+
+// Deployment target
+IPHONEOS_DEPLOYMENT_TARGET = 17.0
